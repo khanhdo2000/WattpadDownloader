@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from ebooklib import epub
 from re import sub
 
+from ..logs import logger
 from ..models import Story
 from .types import AbstractGenerator
 
@@ -23,6 +24,88 @@ class EPUBGenerator(AbstractGenerator):
 
         self.book: epub.EpubBook = epub.EpubBook()
 
+    def _get_valid_language_code(self) -> str:
+        """Get a valid ISO language code with fallback handling."""
+        # Language name to ISO 639-1 code mapping
+        language_map = {
+            "English": "en",
+            "Spanish": "es", 
+            "French": "fr",
+            "German": "de",
+            "Italian": "it",
+            "Portuguese": "pt",
+            "Russian": "ru",
+            "Chinese": "zh",
+            "Japanese": "ja",
+            "Korean": "ko",
+            "Arabic": "ar",
+            "Hindi": "hi",
+            "Dutch": "nl",
+            "Swedish": "sv",
+            "Norwegian": "no",
+            "Danish": "da",
+            "Finnish": "fi",
+            "Polish": "pl",
+            "Czech": "cs",
+            "Hungarian": "hu",
+            "Romanian": "ro",
+            "Bulgarian": "bg",
+            "Croatian": "hr",
+            "Serbian": "sr",
+            "Slovak": "sk",
+            "Slovenian": "sl",
+            "Estonian": "et",
+            "Latvian": "lv",
+            "Lithuanian": "lt",
+            "Greek": "el",
+            "Turkish": "tr",
+            "Hebrew": "he",
+            "Thai": "th",
+            "Vietnamese": "vi",
+            "Indonesian": "id",
+            "Malay": "ms",
+            "Tagalog": "tl",
+            "Filipino": "fil",
+            "Ukrainian": "uk",
+            "Belarusian": "be",
+            "Macedonian": "mk",
+            "Albanian": "sq",
+            "Maltese": "mt",
+            "Icelandic": "is",
+            "Irish": "ga",
+            "Welsh": "cy",
+            "Basque": "eu",
+            "Catalan": "ca",
+            "Galician": "gl"
+        }
+        
+        # Get language from story metadata
+        language = self.story.get("language", {}).get("name", "")
+        logger.info(f"Language from API: {repr(language)}")
+        
+        # Handle empty, None, or invalid language
+        if not language or language.strip() == "":
+            logger.warning("Language field is empty or missing, defaulting to 'en'")
+            return "en"
+        
+        # Clean the language string
+        language = language.strip()
+        
+        # Check if it's already a valid ISO code (2-3 characters)
+        if len(language) in [2, 3] and language.isalpha():
+            logger.info(f"Using language code as-is: {language}")
+            return language.lower()
+        
+        # Try to map language name to ISO code
+        mapped_language = language_map.get(language, language)
+        if mapped_language != language:
+            logger.info(f"Mapped '{language}' to '{mapped_language}'")
+            return mapped_language
+        
+        # If we can't map it, log warning and default to English
+        logger.warning(f"Unknown language '{language}', defaulting to 'en'")
+        return "en"
+
     def add_metadata(self):
         """Add metadata to epub."""
         self.book.add_author(self.story["user"]["username"])
@@ -31,7 +114,10 @@ class EPUBGenerator(AbstractGenerator):
         self.book.add_metadata("DC", "description", self.story["description"])
         self.book.add_metadata("DC", "date", self.story["createDate"])
         self.book.add_metadata("DC", "modified", self.story["modifyDate"])
-        self.book.add_metadata("DC", "language", self.story["language"]["name"])
+        
+        # Handle language with validation and fallback
+        language = self._get_valid_language_code()
+        self.book.add_metadata("DC", "language", language)
 
         self.book.add_metadata(
             None, "meta", "", {"name": "tags", "content": ", ".join(self.story["tags"])}

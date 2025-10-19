@@ -1,57 +1,87 @@
-WattpadDownloader ([Demo](https://wpd.my/))
----
-Straightforward, Extendable WebApp to download Wattpad Books as EPUB Files.
+# Wattpad Downloader
 
-![image](https://github.com/user-attachments/assets/b9d87d6b-5302-4561-98b0-d7f95bff9f04)
-
-
-Stars ⭐ are appreciated. Thanks!
+A web application that allows users to download Wattpad stories as PDF or EPUB files.
 
 ## Features
-- ⚡ Lightweight Frontend.
-- 🪙 Supports Authentication (Download paid stories from your account!)
-- 🌐 API Support (Visit the `/docs` path on your instance for more.)
-- 🐇 Fast Generation
-- 🗃️ Caching, Ratelimit handling
-- 🐳 Docker Support
-- 🏷️ Generated books contain metadata, supported by Calibre and other E-Book Software.
-- 📖 Plays well with E-Readers. (Send2Kindle, KOReader, ReMarkable, KOBO, Calibre Reader...)
-- 💻 Easily Hackable. Extend with ease.
 
-Still not convinced? Take a look some [sample downloads](./samples/).
+- Download Wattpad stories as PDF or EPUB
+- Support for both free and paid stories (with authentication)
+- Image downloading support
+- RTL language support (Arabic, etc.)
+- Send to Kindle support
+- Discord bot integration
+- High-speed PDF downloads for donators
 
+## Architecture
 
-## Set Up
-1. Clone the repository: `git clone https://github.com/TheOnlyWayUp/WattpadDownloader/ && cd WattpadDownloader`
-2. Build the image: `docker build . -t 'wp_downloader'` (This takes about 2 Minutes)
-3. Run the Container: `docker run -d -p 5042:80 wp_downloader`
+- **Frontend**: SvelteKit
+- **Backend**: FastAPI (Python)
+- **PDF Generation**: WeasyPrint
+- **EPUB Generation**: ebooklib
+- **Deployment**: Docker with Traefik reverse proxy
 
-That's it! You can use your instance at `http://localhost:5042`. API Documentation is available at `http://localhost:5042/docs`.
+## Quick Start
 
-### Concurrent Requests
-The file-based cache struggles with concurrent requests (discussed in TheOnlyWayUp/WattpadDownloader#2 and TheOnlyWayUp/WattpadDownloader#22). If you're downloading a large number of books concurrently, switch to the Redis cache. Assuming you've built the image already:
-1. Fill the .env file. Localhost will not work in a docker container unless [`host.docker.internal`](https://docs.docker.com/desktop/features/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host) or a platform-specific variant is provided.
+### Local Development
+
+1. **Frontend**:
+   ```bash
+   cd src/frontend
+   npm install
+   npm run dev
+   ```
+
+2. **Backend**:
+   ```bash
+   cd src/api
+   pip install -r requirements.txt
+   python src/main.py
+   ```
+
+### Docker Deployment
+
+```bash
+# Build the image
+docker build -t wattpad-downloader .
+
+# Run locally
+docker run -p 80:80 wattpad-downloader
 ```
-USE_CACHE=true
-CACHE_TYPE=redis
-REDIS_CONNECTION_URL=redis://username:password@host:port
-```
 
+## Production Deployment
 
-2. Run the container and supply the .env file, `docker run -d -p 5042:80 --env-file .env wp_downloader`
-Alternatively, if Redis is running on localhost
-2. Modify your `.env` file, replacing `localhost` with `host.docker.internal`. `redis://localhost:6379` should become `redis://host.docker.internal:6379`. Then, start the container, `docker run -d -p 5042:80 --env-file .env --add-host host.docker.internal:host-gateway wp_downloader`
+The application is deployed on:
+- **Server**: 31.97.70.110
+- **Domain**: qc0k4ck0oooscwkskws8gg4o.31.97.70.110.sslip.io
+- **SSH**: `ssh root@31.97.70.110`
 
-## Development
-- Developers, ensure you have `wkhtmltopdf` available on your PATH. 
-- Run `wkhtmltopdf` on your terminal, if you see "Reduced Functionality", run [this script](https://raw.githubusercontent.com/JazzCore/python-pdfkit/b7bf798b946fa5655f8e82f0d80dec6b6b13d414/ci/before-script.sh) to install a fully featured compilation of `wkhtmltopdf.
+### Deployment Options
 
----
+1. **Coolify (Recommended)**: See [COOLIFY-DEPLOYMENT.md](./COOLIFY-DEPLOYMENT.md)
+2. **Manual Docker**: See [DEPLOYMENT.md](./DEPLOYMENT.md)
+3. **Docker Compose**: Use the included `docker-compose.yml`
 
-My thanks to [aerkalov/ebooklib](https://github.com/aerkalov/ebooklib) for a fast and well-documented package.
+## Troubleshooting
 
----
+If you encounter issues, see [DEBUGGING.md](./DEBUGGING.md) for common problems and solutions.
 
-<div align="center">
-    <p>TheOnlyWayUp © 2024</p>
-</div>
+## Recent Fixes
+
+- **2025-01-19**: Fixed Bad Gateway Error (502) - Traefik port configuration issue
+- **2024-12-24**: Less Errors, Throttled Downloads
+- **2024-11-24**: Paste Links support
+- **2024-11-24**: Send to Kindle Support
+- **2024-11-24**: Fixed Image Downloads
+- **2024-10-24**: Discord Bot integration
+- **2024-07-24**: RTL Language support
+- **2024-06-24**: Authenticated Downloads
+- **2024-06-24**: Image Downloading
+
+## Support
+
+- **Discord**: [Join our Discord](https://discord.gg/P9RHC4KCwd)
+- **Donate**: [Buy me a Coffee](https://buymeacoffee.com/theonlywayup)
+
+## License
+
+Copyright © 2025 - All rights reserved by [Dhanush R](https://rambhat.la)

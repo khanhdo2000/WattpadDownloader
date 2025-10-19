@@ -21,8 +21,8 @@ RUN apt update
 RUN apt install -y aria2
 RUN apt-fast install -y git build-essential libpango-1.0-0 libpangoft2-1.0-0 wget
 
-ENV EXIFTOOL_VERSION="13.06"
-RUN wget "https://exiftool.org/Image-ExifTool-${EXIFTOOL_VERSION}.tar.gz"
+ENV EXIFTOOL_VERSION="13.39"
+RUN wget "https://sourceforge.net/projects/exiftool/files/Image-ExifTool-${EXIFTOOL_VERSION}.tar.gz/download" -O "Image-ExifTool-${EXIFTOOL_VERSION}.tar.gz"
 RUN gzip -dc "Image-ExifTool-${EXIFTOOL_VERSION}.tar.gz" | tar -xf -
 WORKDIR /app/Image-ExifTool-${EXIFTOOL_VERSION}
 RUN perl Makefile.PL
