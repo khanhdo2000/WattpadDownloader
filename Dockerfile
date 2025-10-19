@@ -9,7 +9,7 @@ COPY src/frontend/. .
 RUN npm run build
 # Thanks https://stackoverflow.com/q/76988450
 
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ RUN apt update
 RUN apt install -y aria2
 RUN apt-fast install -y git build-essential libpango-1.0-0 libpangoft2-1.0-0 wget
 
-ENV EXIFTOOL_VERSION="13.39"
+ENV EXIFTOOL_VERSION="13.06"
 RUN wget "https://exiftool.org/Image-ExifTool-${EXIFTOOL_VERSION}.tar.gz"
 RUN gzip -dc "Image-ExifTool-${EXIFTOOL_VERSION}.tar.gz" | tar -xf -
 WORKDIR /app/Image-ExifTool-${EXIFTOOL_VERSION}
@@ -35,9 +35,11 @@ WORKDIR /app
 
 # --- #
 
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
 COPY src/api/requirements.txt requirements.txt
 COPY src/api/src/create_book/generators/pdf/exiftool.config exiftool.config
-RUN pip install --no-cache-dir -r requirements.txt
+RUN uv pip install -r requirements.txt --system
 COPY --from=0 /build/build /app/src/build
 COPY src/api/src src
 
