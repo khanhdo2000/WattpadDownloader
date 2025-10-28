@@ -20,6 +20,7 @@ from fastapi.staticfiles import StaticFiles
 
 from create_book import (
     EPUBGenerator,
+    MOBIGenerator,
     PDFGenerator,
     StoryNotFoundError,
     WattpadError,
@@ -77,6 +78,7 @@ app.add_middleware(RequestCancelledMiddleware)
 class DownloadFormat(Enum):
     pdf = "pdf"
     epub = "epub"
+    mobi = "mobi"
 
 
 class DownloadMode(Enum):
@@ -202,6 +204,9 @@ async def handle_download(
                     metadata, part_trees, cover_data, images, author_image
                 )
                 media_type = "application/pdf"
+            case DownloadFormat.mobi:
+                book = MOBIGenerator(metadata, part_trees, cover_data, images)
+                media_type = "application/x-mobipocket-ebook"
 
         logger.info(f"Retrieved story metadata and cover ({story_id=})")
 

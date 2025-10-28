@@ -1,6 +1,6 @@
 <script>
   let downloadImages = $state(false);
-  let downloadAsPdf = $state(false); // 0 = epub, 1 = pdf
+  let downloadFormat = $state("epub"); // epub, pdf, or mobi
   let isPaidStory = $state(false);
   let invalidUrl = $state(false);
   let afterDownloadPage = $state(false);
@@ -26,7 +26,7 @@
         ? `&username=${encodeURIComponent(credentials.username)}&password=${encodeURIComponent(credentials.password)}`
         : "") +
       `&mode=${mode}` +
-      (downloadAsPdf ? "&format=pdf" : "&format=epub")
+      `&format=${downloadFormat}`
   );
 
   /** @type {HTMLDialogElement} */
@@ -156,6 +156,7 @@
             <!-- TODO: 'max-lg: hidden' to hide on screen sizes smaller than lg. I'll do this when I figure out how to make this show up _below_ the card on smaller screen sizes. -->
             <!-- <li>12/24 - ⚡ Super-fast Downloads!</li>
             <li>12/24 - 📑 PDF Downloads!</li> -->
+            <li>01/25 - 📱 MOBI Format Support!</li>
             <li>05/25 - ⚖️ Legal Compliance</li>
             <li>12/24 - 📂 Less Errors, Throttled Downloads</li>
             <li>11/24 - 🔗 Paste Links!</li>
@@ -240,27 +241,27 @@
             </div>
 
             <div class="form-control mt-6">
+              <select
+                class="select select-bordered w-full mb-4"
+                bind:value={downloadFormat}
+              >
+                <option value="epub">Download as EPUB</option>
+                <option value="pdf">Download as PDF</option>
+                <option value="mobi">Download as MOBI</option>
+              </select>
+
               <a
                 class="btn rounded-l-none"
-                class:btn-primary={!downloadAsPdf}
-                class:btn-secondary={downloadAsPdf}
+                class:btn-primary={downloadFormat === "epub"}
+                class:btn-secondary={downloadFormat === "pdf"}
+                class:btn-accent={downloadFormat === "mobi"}
                 class:btn-disabled={buttonDisabled}
                 data-umami-event="Download"
                 href={url}
                 onclick={() => (afterDownloadPage = true)}>Download</a
               >
 
-              <!-- <label class="swap w-fit label mt-2">
-                <input type="checkbox" bind:checked={downloadAsPdf} />
-                <div class="swap-on">
-                  Downloading as <span class=" underline text-bold">PDF</span> (Click)
-                </div>
-                <div class="swap-off">
-                  Downloading as <span class=" underline text-bold">EPUB</span> (Click)
-                </div>
-              </label> -->
-
-              <label class="label cursor-pointer">
+              <label class="label cursor-pointer mt-4">
                 <span class="label-text text-gray-800">Include Images (<strong>Slower Download</strong>)</span>
                 <input
                   type="checkbox"

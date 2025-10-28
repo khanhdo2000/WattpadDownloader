@@ -7,7 +7,7 @@ from .create_book import (
     fetch_story_from_partId,
 )
 from .exceptions import PartNotFoundError, StoryNotFoundError, WattpadError
-from .generators import EPUBGenerator, PDFGenerator
+from .generators import EPUBGenerator, MOBIGenerator, PDFGenerator
 from .logs import logger
 from .parser import fetch_image
 from .utils import slugify

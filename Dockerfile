@@ -13,13 +13,15 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-# Install apt-fast, git, exiftool
+# Install apt-fast, git, exiftool, calibre
 
 COPY --from=nobodyxu/apt-fast:latest-debian-buster-slim /usr/local/ /usr/local/
 
 RUN apt update
 RUN apt install -y aria2
 RUN apt-fast install -y git build-essential libpango-1.0-0 libpangoft2-1.0-0 wget
+# Install calibre for MOBI conversion
+RUN apt-fast install -y calibre
 
 ENV EXIFTOOL_VERSION="13.39"
 RUN wget "https://sourceforge.net/projects/exiftool/files/Image-ExifTool-${EXIFTOOL_VERSION}.tar.gz/download" -O "Image-ExifTool-${EXIFTOOL_VERSION}.tar.gz"
