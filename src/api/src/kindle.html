@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -117,21 +117,21 @@
     <div class="container">
         <div class="header">
             <h1 class="title">WP Downloader</h1>
-            <p class="subtitle">Download stories for your Kindle</p>
+            <p class="subtitle">Tải truyện cho Kindle của bạn</p>
         </div>
         
         <form method="get" action="/download">
             <div class="form-group">
-                <label for="storyId" class="label">Story ID</label>
+                <label for="storyId" class="label">ID Truyện</label>
                 <input
                     type="text"
                     id="storyId"
                     name="storyId"
-                    placeholder="Enter story ID (e.g., 237369078)"
+                    placeholder="Nhập ID truyện (ví dụ: 237369078)"
                     class="input"
                     required
                     pattern="[0-9]+"
-                    title="Story ID must contain only numbers"
+                    title="ID truyện chỉ được chứa số"
                 />
             </div>
             
@@ -140,19 +140,19 @@
             <input type="hidden" name="mode" value="story">
             <input type="hidden" name="om" value="1">
             
-            <button type="submit" class="button">Download MOBI</button>
+            <button type="submit" class="button">Tải MOBI</button>
         </form>
         
         <div class="back-link">
-            <a href="/">← Back to main page</a>
+            <a href="/">← Quay lại trang chủ</a>
         </div>
         
         <div class="instructions">
-            <p><strong>How to get Story ID:</strong></p>
-            <p>1. Go to wattpad.com</p>
-            <p>2. Find your story URL</p>
-            <p>3. Copy the numbers from the URL</p>
-            <p>Example: wattpad.com/story/237369078-title</p>
+            <p><strong>Cách lấy ID Truyện:</strong></p>
+            <p>1. Truy cập wattpad.com</p>
+            <p>2. Tìm URL truyện của bạn</p>
+            <p>3. Sao chép các số từ URL</p>
+            <p>Ví dụ: wattpad.com/story/237369078-title</p>
         </div>
     </div>
 </body>
