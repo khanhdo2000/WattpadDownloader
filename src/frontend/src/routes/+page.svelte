@@ -160,7 +160,9 @@
             <li>05/25 - ⚖️ Legal Compliance</li>
             <li>12/24 - 📂 Less Errors, Throttled Downloads</li>
             <li>11/24 - 🔗 Paste Links!</li>
-            <li>11/24 - 📨 Send to Kindle Support!</li>
+            <li>
+              11/24 - 📨 <a href="/kindle" class="link underline">Send to Kindle Support!</a> (Simple Mode)
+            </li>
 
             <li>11/24 - ⚒️ Fix Image Downloads</li>
             <li>
