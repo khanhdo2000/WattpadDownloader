@@ -1,10 +1,10 @@
 # Wattpad Downloader
 
-A web application that allows users to download Wattpad stories as PDF or EPUB files.
+A web application that allows users to download Wattpad stories as PDF, EPUB, or MOBI files.
 
 ## Features
 
-- Download Wattpad stories as PDF or EPUB
+- Download Wattpad stories as PDF, EPUB, or MOBI
 - Support for both free and paid stories (with authentication)
 - Image downloading support
 - RTL language support (Arabic, etc.)
@@ -18,11 +18,33 @@ A web application that allows users to download Wattpad stories as PDF or EPUB f
 - **Backend**: FastAPI (Python)
 - **PDF Generation**: WeasyPrint
 - **EPUB Generation**: ebooklib
+- **MOBI Generation**: Calibre (converts from EPUB)
 - **Deployment**: Docker with Traefik reverse proxy
 
 ## Quick Start
 
 ### Local Development
+
+**Prerequisites**: 
+- Node.js 20+
+- Python 3.13+
+- Calibre (for MOBI conversion) - Install from https://calibre-ebook.com/download
+
+#### Option 1: Using Docker Compose Watch (Recommended)
+
+This method automatically rebuilds the application when you make code changes.
+
+```bash
+# Start the application with auto-rebuild on code changes
+docker compose watch
+
+# In another terminal, test the API
+curl http://localhost
+```
+
+Any changes to the source files will automatically trigger a rebuild and the container will restart with your changes.
+
+#### Option 2: Manual Development
 
 1. **Frontend**:
    ```bash
@@ -39,6 +61,18 @@ A web application that allows users to download Wattpad stories as PDF or EPUB f
    ```
 
 ### Docker Deployment
+
+#### Using Docker Compose
+
+```bash
+# Build and run with docker compose
+docker compose up --build
+
+# Or run in detached mode
+docker compose up -d
+```
+
+#### Using Docker directly
 
 ```bash
 # Build the image
@@ -67,6 +101,7 @@ If you encounter issues, see [DEBUGGING.md](./DEBUGGING.md) for common problems 
 
 ## Recent Fixes
 
+- **2025-01-20**: Added MOBI format support
 - **2025-01-19**: Fixed Bad Gateway Error (502) - Traefik port configuration issue
 - **2024-12-24**: Less Errors, Throttled Downloads
 - **2024-11-24**: Paste Links support

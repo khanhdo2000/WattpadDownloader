@@ -1,0 +1,57 @@
+# Include any files or directories that you don't want to be copied to your
+# container here (e.g., local build artifacts, temporary files, etc.).
+
+# Git files
+.git
+.gitignore
+.github
+
+# Docker files
+.dockerignore
+docker-compose.yml
+Dockerfile
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+.pytest_cache
+.coverage
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+pics/
+samples/
+
+# Environment
+.env
+.venv
+venv/
+ENV/
+
+# Lock files
+uv.lock
+
