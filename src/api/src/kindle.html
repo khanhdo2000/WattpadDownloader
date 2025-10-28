@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wattpad Downloader - Kindle</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 28rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .title {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+        
+        .input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+        
+        .button {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        .button:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .back-link a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        
+        .back-link a:hover {
+            color: #1e40af;
+        }
+        
+        .instructions {
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            text-align: center;
+        }
+        
+        .instructions p {
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">WP Downloader</h1>
+            <p class="subtitle">Download stories for your Kindle</p>
+        </div>
+        
+        <form method="get" action="/download">
+            <div class="form-group">
+                <label for="storyId" class="label">Story ID</label>
+                <input
+                    type="text"
+                    id="storyId"
+                    name="storyId"
+                    placeholder="Enter story ID (e.g., 237369078)"
+                    class="input"
+                    required
+                    pattern="[0-9]+"
+                    title="Story ID must contain only numbers"
+                />
+            </div>
+            
+            <!-- Hidden fields for MOBI format and story mode -->
+            <input type="hidden" name="format" value="mobi">
+            <input type="hidden" name="mode" value="story">
+            <input type="hidden" name="om" value="1">
+            
+            <button type="submit" class="button">Download MOBI</button>
+        </form>
+        
+        <div class="back-link">
+            <a href="/">← Back to main page</a>
+        </div>
+        
+        <div class="instructions">
+            <p><strong>How to get Story ID:</strong></p>
+            <p>1. Go to wattpad.com</p>
+            <p>2. Find your story URL</p>
+            <p>3. Copy the numbers from the URL</p>
+            <p>Example: wattpad.com/story/237369078-title</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -87,125 +87,37 @@ class DownloadMode(Enum):
 
 
 @app.get("/")
-def home():
+def home(request: Request):
+    # Check if user agent indicates Kindle browser
+    user_agent = request.headers.get("user-agent", "").lower()
+    is_kindle = any(keyword in user_agent for keyword in [
+        "kindle", "silk", "kindle fire", "amazon"
+    ])
+    
+    if is_kindle:
+        # Redirect Kindle browsers to the simple Kindle page
+        return RedirectResponse(url="/kindle", status_code=302)
+    
     return FileResponse(BUILD_PATH / "index.html")
 
 
 @app.get("/kindle")
-def kindle_simple():
-    """Simple HTML page for Kindle browsers without JavaScript."""
-    kindle_html_path = BUILD_PATH / "kindle.html"
-    if kindle_html_path.exists():
-        return FileResponse(kindle_html_path)
-    else:
-        # Fallback to serving simple HTML directly
-        simple_html = """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WP Downloader - Simple</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #666;
-            font-weight: bold;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .info {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #e8f5e9;
-            border-left: 4px solid #4CAF50;
-            font-size: 14px;
-            color: #333;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>WP Downloader</h1>
-        <form method="GET" action="/download_simple">
-            <div class="form-group">
-                <label for="story_id">Story ID:</label>
-                <input 
-                    type="text" 
-                    id="story_id" 
-                    name="story_id" 
-                    placeholder="Enter Wattpad story ID (e.g., 237369078)" 
-                    required
-                />
-            </div>
-            <button type="submit">Download MOBI</button>
-        </form>
-        <div class="info">
-            <strong>Tip:</strong> Find the story ID in the Wattpad URL.<br>
-            Example: wattpad.com/story/<strong>237369078</strong>-title-name
-        </div>
-    </div>
-</body>
-</html>
-"""
-        return HTMLResponse(content=simple_html)
+def kindle_page():
+    """Simple Kindle-optimized page for downloading MOBI files."""
+    return FileResponse(Path(__file__).parent / "kindle.html")
 
 
-@app.get("/download_simple")
-async def download_simple(story_id: str):
-    """Redirect simple form submission to MOBI download."""
-    # Validate story_id is numeric
-    if not story_id.isdigit():
-        return HTMLResponse(
-            status_code=422,
-            content='Invalid story ID. Please enter only numbers.'
-        )
-    
-    # Redirect to the download endpoint with MOBI format
+@app.get("/download")
+def download_with_query_params(
+    storyId: str,
+    format: str = "mobi",
+    mode: str = "story",
+    om: int = 1
+):
+    """Handle download requests with query parameters (fallback for forms without JavaScript)."""
+    # Redirect to the proper download endpoint
     return RedirectResponse(
-        url=f"/download/{story_id}?format=mobi&mode=story",
+        url=f"/download/{storyId}?format={format}&mode={mode}&om={om}",
         status_code=302
     )
 
